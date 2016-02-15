@@ -1,0 +1,47 @@
+<?php
+
+use \Svycka\SocialUser\OAuth2\GrantType;
+
+return [
+    'svycka_social_user' => [
+        // service manager key with returns service implementing \SocialUser\LocalUserProviderInterface
+        'local_user_provider' => '',
+
+        // If you don't use doctrine you can change storage as you need
+        //'social_user_storage' => \SocialUser\Storage\Doctrine::class,
+        // you also can change entity. Should implement \SocialUser\Entity\SocialUserInterface
+        //'social_user_entity' => \SocialUser\Entity\SocialUser::class,
+
+        // place for grant types configuration if any. Key is grant type class name and value is array of settings
+        'grant_type_options' => [
+            // facebook grantType config example
+            GrantType\Facebook::class => [
+                'app_id' => 'FB_APP_ID',
+                'app_secret' => 'FM_APP_SECRET',
+            ],
+            // google grantType config example
+            GrantType\Google::class => [
+                'audience' => 'YOUR_GOOGLE_APP_ID.apps.googleusercontent.com',
+            ],
+        ],
+    ],
+
+    // If you use doctrine, you can use build-in entity or create your own
+    /**
+    'doctrine' => [
+        'driver' => [
+            'social_user_entities' => [
+                'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
+                'cache' => 'array',
+                'paths' => [__DIR__ . '/../../vendor/svycka/SocialUser/src/Entity'],
+            ],
+
+            'orm_default' => [
+                'drivers' => [
+                    'Svycka\SocialUser\Entity' => 'social_user_entities',
+                ],
+            ],
+        ],
+    ],
+    //*/
+];

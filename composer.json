@@ -1,0 +1,59 @@
+{
+    "name": "svycka/social-user",
+    "description": "This module adds custom grant types for oauth2-server-php to allow login with social services like google or facebook.",
+    "keywords": [
+        "social login",
+        "google",
+        "facebook",
+        "oauth2",
+        "oauth2-server-php",
+        "social-user",
+        "zendframework",
+        "doctrine",
+        "zf2",
+        "module"
+    ],
+    "homepage": "https://github.com/svycka/social-user",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Vytautas Stankus",
+            "email": "svycka@gmail.com",
+            "homepage": "https://github.com/svycka"
+        }
+    ],
+    "require": {
+        "php": ">=5.5",
+        "zendframework/zend-modulemanager": "~2.5",
+        "zendframework/zend-servicemanager": "~2.5",
+        "bshaffer/oauth2-server-php": "^1.8"
+    },
+    "require-dev": {
+        "doctrine/doctrine-orm-module": "0.*",
+        "facebook/php-sdk-v4": "^5.1",
+        "guzzlehttp/guzzle": "^6.1",
+        "phpunit/phpunit": "4.*",
+        "scrutinizer/ocular": "~1.1",
+        "squizlabs/php_codesniffer": "^2.5"
+    },
+    "suggest": {
+        "facebook/php-sdk-v4": "Required, if you will use Facebook grant type",
+        "guzzlehttp/guzzle": "Required, if you will use Google grant type",
+        "doctrine/doctrine-orm-module": "Required, if you will use Doctrine for storage"
+    },
+    "autoload": {
+        "psr-4": {
+            "Svycka\\SocialUser\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Svycka\\SocialUserTest\\": "tests/SocialUserTest"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}
