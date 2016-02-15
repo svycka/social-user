@@ -32,7 +32,8 @@ class Facebook extends AbstractSocialGrantType
         $this->facebook = $facebook;
     }
 
-    public function getQuerystringIdentifier() {
+    public function getQuerystringIdentifier()
+    {
         return 'facebook';
     }
 
@@ -65,7 +66,7 @@ class Facebook extends AbstractSocialGrantType
             }
 
             return $userProfile;
-        } catch(FacebookSDKException $e) {
+        } catch (FacebookSDKException $e) {
             return null;
         }
     }

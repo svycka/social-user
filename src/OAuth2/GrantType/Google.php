@@ -41,7 +41,8 @@ class Google extends AbstractSocialGrantType
         $this->options           = $options;
     }
 
-    public function getQuerystringIdentifier() {
+    public function getQuerystringIdentifier()
+    {
         return 'google';
     }
 
@@ -81,7 +82,7 @@ class Google extends AbstractSocialGrantType
             $userProfile->setEmailVerified($tokenInfo['email_verified']?:false);
 
             return $userProfile;
-        } catch(ClientException $e) {
+        } catch (ClientException $e) {
             return null;
         }
     }

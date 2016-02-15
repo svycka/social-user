@@ -43,7 +43,10 @@ class GoogleTest extends \PHPUnit_Framework_TestCase
 
     public function testWillThrowExceptionIfApplicationIdIsNotProvided()
     {
-        $this->setExpectedException(\InvalidArgumentException::class, '"audience" option is required but not provided.');
+        $this->setExpectedException(
+            \InvalidArgumentException::class,
+            '"audience" option is required but not provided.'
+        );
         $this->grantType = new Google($this->socialUserService->reveal(), new \GuzzleHttp\Client, []);
     }
 
@@ -143,7 +146,8 @@ class GoogleTest extends \PHPUnit_Framework_TestCase
             "email"          => "testuser@gmail.com",
             "email_verified" => "true",
             "name"           => "Test User",
-            "picture"        => "https://lh4.googleusercontent.com/-kYgzyAWpZzJ/ABCDEFGHI/AAAJKLMNOP/tIXL9Ir44LE/s99-c/photo.jpg",
+            "picture"        => "https://lh4.googleusercontent.com/-kYgzyAWpZzJ/ABCD"
+                                . "EFGHI/AAAJKLMNOP/tIXL9Ir44LE/s99-c/photo.jpg",
             "given_name"     => "Test",
             "family_name"    => "User",
             "locale"         => "en"

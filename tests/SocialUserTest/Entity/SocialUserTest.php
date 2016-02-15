@@ -43,5 +43,4 @@ class SocialUserTest extends \PHPUnit_Framework_TestCase
         $this->entity->setLocalUser(6);
         $this->assertEquals(6, $this->entity->getLocalUser());
     }
-
 }
