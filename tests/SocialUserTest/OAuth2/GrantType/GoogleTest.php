@@ -130,6 +130,41 @@ class GoogleTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testCanAuthenticateWithoutAdditionalPermissions()
+    {
+        $this->request->request('token')->willReturn('token');
+        $tokenInfo = json_encode([
+            // These six fields are included in all Google ID Tokens.
+            "iss"            => "https://accounts.google.com",
+            "sub"            => "110169484474386276334",
+            "azp"            => "1008719970978-hb24n2dstb40o45d4feuo2ukqmcc6381.apps.googleusercontent.com",
+            "aud"            => "1008719970978-hb24n2dstb40o45d4feuo2ukqmcc6381.apps.googleusercontent.com",
+            "iat"            => "1433978353",
+            "exp"            => "1433981953"
+        ]);
+        $this->setSocialApiResponse($tokenInfo);
+
+        $this->socialUserService->getLocalUser(Google::PROVIDER_NAME, new TypeToken(UserProfileInterface::class))
+            ->willReturn(123)->shouldBeCalled();
+
+        $this->assertTrue($this->grantType->validateRequest($this->request->reveal(), $this->response->reveal()));
+        $this->assertEquals('google', $this->grantType->getQuerystringIdentifier());
+        $this->assertEquals(123, $this->grantType->getUserId());
+
+        $accessToken = $this->prophesize(AccessTokenInterface::class);
+        $accessToken->createAccessToken(
+            $this->grantType->getClientId(),
+            $this->grantType->getUserId(),
+            $this->grantType->getScope()
+        )->shouldBeCalled();
+        $this->grantType->createAccessToken(
+            $accessToken->reveal(),
+            $this->grantType->getClientId(),
+            $this->grantType->getUserId(),
+            $this->grantType->getScope()
+        );
+    }
+
     private function tokenInfo()
     {
         return json_encode([

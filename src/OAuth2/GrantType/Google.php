@@ -75,11 +75,11 @@ class Google extends AbstractSocialGrantType
 
             $userProfile = new UserProfile();
             $userProfile->setIdentifier($tokenInfo['sub']);
-            $userProfile->setDisplayName($tokenInfo['name']?:null);
-            $userProfile->setFirstName($tokenInfo['given_name']?:null);
-            $userProfile->setLastName($tokenInfo['family_name']?:null);
-            $userProfile->setEmail($tokenInfo['email']?:null);
-            $userProfile->setEmailVerified($tokenInfo['email_verified']?:false);
+            $userProfile->setDisplayName(isset($tokenInfo['name']) ? $tokenInfo['name'] : null);
+            $userProfile->setFirstName(isset($tokenInfo['given_name']) ? $tokenInfo['given_name'] : null);
+            $userProfile->setLastName(isset($tokenInfo['family_name']) ? $tokenInfo['family_name'] : null);
+            $userProfile->setEmail(isset($tokenInfo['email']) ? $tokenInfo['email'] : null);
+            $userProfile->setEmailVerified(isset($tokenInfo['email_verified']) ? $tokenInfo['email_verified'] : false);
 
             return $userProfile;
         } catch (ClientException $e) {
