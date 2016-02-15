@@ -3,8 +3,8 @@
 namespace Svycka\SocialUser\OAuth2\GrantType\Factory;
 
 use Facebook\Facebook;
-use Svycka\SocialUser\OAuth2\GrantType\Facebook as FacebookGrantType;
 use Interop\Container\ContainerInterface;
+use Svycka\SocialUser\OAuth2\GrantType;
 use Svycka\SocialUser\Service\SocialUserService;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\FactoryInterface;
@@ -20,18 +20,18 @@ class FacebookFactory implements FactoryInterface
     {
         $options = $container->get('Config')['svycka_social_user']['grant_type_options'];
 
-        if (empty($options[FacebookGrantType::class])) {
+        if (empty($options[GrantType\Facebook::class])) {
             throw new ServiceNotCreatedException('Facebook API options are not set');
         }
 
-        $facebook = new Facebook($options[FacebookGrantType::class]);
+        $facebook = new Facebook($options[GrantType\Facebook::class]);
         $socialUserService = $container->get(SocialUserService::class);
 
-        return new FacebookGrantType($socialUserService, $facebook);
+        return new GrantType\Facebook($socialUserService, $facebook);
     }
 
     public function createService(ServiceLocatorInterface $services)
     {
-        return $this($services, FacebookGrantType::class);
+        return $this($services, GrantType\Facebook::class);
     }
 }

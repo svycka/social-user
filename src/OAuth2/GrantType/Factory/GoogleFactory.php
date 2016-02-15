@@ -2,8 +2,8 @@
 
 namespace Svycka\SocialUser\OAuth2\GrantType\Factory;
 
-use Svycka\SocialUser\OAuth2\GrantType;
 use Interop\Container\ContainerInterface;
+use Svycka\SocialUser\OAuth2\GrantType;
 use Svycka\SocialUser\Service\SocialUserService;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\FactoryInterface;
