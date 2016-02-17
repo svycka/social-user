@@ -1,7 +1,6 @@
 # svycka/social-user
 
 [![Build Status][ico-travis]][link-travis]
-
 [![Coverage Status](https://coveralls.io/repos/github/svycka/social-user/badge.svg?branch=master)](https://coveralls.io/github/svycka/social-user?branch=master)
 [![Quality Score][ico-code-quality]][link-code-quality]
 [![Latest Version on Packagist][ico-version]][link-packagist]
