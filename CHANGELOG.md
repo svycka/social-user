@@ -13,7 +13,8 @@ Initial release.
 - Nothing
 
 ### Fixed
-- #1 fixed wrong path name in config example
+- [#1](https://github.com/svycka/social-user/pull/1) fixed wrong path name in config example
+- [#2](https://github.com/svycka/social-user/pull/2) fixed coveralls.io setup
 
 ### Removed
 - Nothing
