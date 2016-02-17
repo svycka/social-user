@@ -13,7 +13,7 @@ Initial release.
 - Nothing
 
 ### Fixed
-- Nothing
+- #1 fixed wrong path name in config example
 
 ### Removed
 - Nothing
