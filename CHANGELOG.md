@@ -7,7 +7,7 @@ All Notable changes to `svycka/social-user` will be documented in this file
 Initial release.
 
 ### Added
-- Nothing
+- [#3](https://github.com/svycka/social-user/pull/3) Added zend-servicemanager 3.0 support
 
 ### Deprecated
 - Nothing
