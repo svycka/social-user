@@ -2,8 +2,11 @@
 
 namespace Svycka\SocialUserTest\OAuth2\GrantType;
 
+use Facebook\Authentication\AccessTokenMetadata;
+use Facebook\Authentication\OAuth2Client;
 use Facebook\Exceptions\FacebookSDKException;
 use Facebook\Facebook as FacebookSDK;
+use Facebook\FacebookApp;
 use OAuth2\RequestInterface;
 use OAuth2\ResponseInterface;
 use OAuth2\ResponseType\AccessTokenInterface;
@@ -68,9 +71,29 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->grantType->validateRequest($this->request->reveal(), $this->response->reveal()));
     }
 
+    public function testDoesNotAllowTokenFromOtherApplications()
+    {
+        $this->request->request('token')->willReturn('facebook_access_token');
+        $this->facebook->getApp()->willReturn(new FacebookApp('123456', 'xxx'));
+        $oauth2client = $this->prophesize(OAuth2Client::class);
+        $oauth2client->debugToken('facebook_access_token')
+            ->willReturn(new AccessTokenMetadata(['data' => ['app_id' => '123']]));
+        $this->facebook->getOAuth2Client()->willReturn($oauth2client->reveal());
+
+        $this->setFacebookApiResponse($this->getGraphUser());
+        $this->response->setError(401, 'invalid_grant', 'Invalid or expired token')->shouldBeCalled();
+
+        $this->assertNull($this->grantType->validateRequest($this->request->reveal(), $this->response->reveal()));
+    }
+
     public function testCanAuthenticateAgainstFacebookButCantGetOrCreateLocalUser()
     {
         $this->request->request('token')->willReturn('facebook_access_token');
+        $this->facebook->getApp()->willReturn(new FacebookApp('123456', 'xxx'));
+        $oauth2client = $this->prophesize(OAuth2Client::class);
+        $oauth2client->debugToken('facebook_access_token')
+            ->willReturn(new AccessTokenMetadata(['data' => ['app_id' => '123456']]));
+        $this->facebook->getOAuth2Client()->willReturn($oauth2client->reveal());
         $this->setFacebookApiResponse($this->getGraphUser());
         $this->socialUserService->getLocalUser(Facebook::PROVIDER_NAME, new TypeToken(UserProfileInterface::class))
             ->willReturn(null);
@@ -86,6 +109,11 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
 
         $this->socialUserService->getLocalUser(Facebook::PROVIDER_NAME, new TypeToken(UserProfileInterface::class))
             ->willReturn(123)->shouldBeCalled();
+        $this->facebook->getApp()->willReturn(new FacebookApp('123456', 'xxx'));
+        $oauth2client = $this->prophesize(OAuth2Client::class);
+        $oauth2client->debugToken('facebook_access_token')
+            ->willReturn(new AccessTokenMetadata(['data' => ['app_id' => '123456']]));
+        $this->facebook->getOAuth2Client()->willReturn($oauth2client->reveal());
 
         $this->assertTrue($this->grantType->validateRequest($this->request->reveal(), $this->response->reveal()));
         $this->assertEquals('facebook', $this->grantType->getQuerystringIdentifier());
