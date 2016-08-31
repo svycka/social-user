@@ -54,6 +54,12 @@ class Facebook extends AbstractSocialGrantType
                 return null;
             }
 
+            // do not accept tokens generated not for our application even if they are valid,
+            // to protect against "man in the middle" attack
+            $tokenMetadata = $this->facebook->getOAuth2Client()->debugToken($token);
+            // this is not required, but lets be sure because facebook API changes very often
+            $tokenMetadata->validateAppId($this->facebook->getApp()->getId());
+
             $userProfile = new UserProfile();
             $userProfile->setIdentifier($user->getId());
             $userProfile->setDisplayName($user->getName());
