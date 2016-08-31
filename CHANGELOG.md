@@ -2,7 +2,7 @@
 
 All Notable changes to `svycka/social-user` will be documented in this file
 
-## NEXT - YYYY-MM-DD
+## v1.1.1 - 2016-08-31
 
 ### Added
 - Nothing
