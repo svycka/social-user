@@ -2,6 +2,23 @@
 
 All Notable changes to `svycka/social-user` will be documented in this file
 
+## NEXT - YYYY-MM-DD
+
+### Added
+- Nothing
+
+### Deprecated
+- Nothing
+
+### Fixed
+- Nothing
+
+### Removed
+- Nothing
+
+### Security
+- Nothing
+
 ## v1.1.1 - 2016-08-31
 
 ### Added
