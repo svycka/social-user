@@ -37,7 +37,7 @@
         "squizlabs/php_codesniffer": "^2.5"
     },
     "suggest": {
-        "facebook/php-sdk-v4": "Required, if you will use Facebook grant type",
+        "facebook/graph-sdk": "Required, if you will use Facebook grant type",
         "guzzlehttp/guzzle": "Required, if you will use Google grant type",
         "doctrine/doctrine-orm-module": "Required, if you will use Doctrine for storage"
     },

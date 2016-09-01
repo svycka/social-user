@@ -11,7 +11,7 @@ All Notable changes to `svycka/social-user` will be documented in this file
 - Nothing
 
 ### Fixed
-- Nothing
+- [#5](https://github.com/svycka/social-user/pull/5) Fixed suggested `facebook/graph-sdk` in `composer.json`
 
 ### Removed
 - Nothing
