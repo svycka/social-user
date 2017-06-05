@@ -17,7 +17,7 @@ class DoctrineStorageFactory implements FactoryInterface
     {
         $entityManager = $container->get('doctrine.entitymanager.orm_default');
 
-        $config = $container->get('Config')['svycka_social_user'];
+        $config = $container->get('config')['svycka_social_user'];
         $options = [
             'social_user_entity' => $config['social_user_entity'],
         ];

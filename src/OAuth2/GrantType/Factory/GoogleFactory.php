@@ -17,7 +17,7 @@ class GoogleFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $options = $container->get('Config')['svycka_social_user']['grant_type_options'];
+        $options = $container->get('config')['svycka_social_user']['grant_type_options'];
 
         if (empty($options[GrantType\Google::class])) {
             throw new ServiceNotCreatedException(sprintf('"%s" options not set', GrantType\Google::class));

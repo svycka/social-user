@@ -20,7 +20,7 @@ class SocialUserServiceFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $services = $this->prophesize(ServiceLocatorInterface::class);
         $services->willImplement(ContainerInterface::class);
-        $services->get('Config')->willReturn([
+        $services->get('config')->willReturn([
             'svycka_social_user' => [
                 'local_user_provider' => LocalUserProviderInterface::class,
                 'social_user_storage' => SocialUserStorageInterface::class,
@@ -42,7 +42,7 @@ class SocialUserServiceFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $services = $this->prophesize(ServiceLocatorInterface::class);
         $services->willImplement(ContainerInterface::class);
-        $services->get('Config')->willReturn([
+        $services->get('config')->willReturn([
             'svycka_social_user' => [
                 'local_user_provider' => 'invalid',
                 'social_user_storage' => SocialUserStorageInterface::class,
@@ -66,7 +66,7 @@ class SocialUserServiceFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $services = $this->prophesize(ServiceLocatorInterface::class);
         $services->willImplement(ContainerInterface::class);
-        $services->get('Config')->willReturn([
+        $services->get('config')->willReturn([
             'svycka_social_user' => [
                 'local_user_provider' => LocalUserProviderInterface::class,
                 'social_user_storage' => 'invalid',

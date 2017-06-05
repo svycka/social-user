@@ -2,16 +2,19 @@
 
 namespace Svycka\SocialUser;
 
-use Zend\ModuleManager\Feature\ConfigProviderInterface;
-
 /**
  * @author Vytautas Stankus <svycka@gmail.com>
  * @license MIT
  */
-class Module implements ConfigProviderInterface
+class Module
 {
     public function getConfig()
     {
-        return include __DIR__ . '/../config/module.config.php';
+        $configProvider = new ConfigProvider();
+
+        return [
+            'service_manager' => $configProvider->getDependencyConfig(),
+            'svycka_social_user' => $configProvider->getModuleConfig(),
+        ];
     }
 }
