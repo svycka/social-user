@@ -5,7 +5,7 @@ All Notable changes to `svycka/social-user` will be documented in this file
 ## NEXT - YYYY-MM-DD
 
 ### Added
-- Nothing
+- [#9](https://github.com/svycka/social-user/pull/9) Added support for zend-expressive
 
 ### Deprecated
 - Nothing
