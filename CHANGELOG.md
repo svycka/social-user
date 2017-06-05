@@ -6,6 +6,7 @@ All Notable changes to `svycka/social-user` will be documented in this file
 
 ### Added
 - [#9](https://github.com/svycka/social-user/pull/9) Added support for zend-expressive
+- [#10](https://github.com/svycka/social-user/pull/10) Added php7.1 and
 
 ### Deprecated
 - Nothing
@@ -14,7 +15,7 @@ All Notable changes to `svycka/social-user` will be documented in this file
 - Nothing
 
 ### Removed
-- Nothing
+- [#10](https://github.com/svycka/social-user/pull/10) Removed HHVM and php5.5 support
 
 ### Security
 - Nothing
