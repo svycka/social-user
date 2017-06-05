@@ -3,6 +3,14 @@
 namespace Svycka\SocialUser;
 
 use \Svycka\SocialUser;
+use Svycka\SocialUser\OAuth2\GrantType\Facebook;
+use Svycka\SocialUser\OAuth2\GrantType\Factory\FacebookFactory;
+use Svycka\SocialUser\OAuth2\GrantType\Factory\GoogleFactory;
+use Svycka\SocialUser\OAuth2\GrantType\Google;
+use Svycka\SocialUser\Service\Factory\SocialUserServiceFactory;
+use Svycka\SocialUser\Service\SocialUserService;
+use Svycka\SocialUser\Storage\Doctrine;
+use Svycka\SocialUser\Storage\Factory\DoctrineStorageFactory;
 
 /**
  * @author Vytautas Stankus <svycka@gmail.com>
@@ -32,10 +40,10 @@ class ConfigProvider
     {
         return [
             'factories' => [
-                SocialUser\OAuth2\GrantType\Facebook::class => SocialUser\OAuth2\GrantType\Factory\FacebookFactory::class,
-                SocialUser\OAuth2\GrantType\Google::class => SocialUser\OAuth2\GrantType\Factory\GoogleFactory::class,
-                SocialUser\Service\SocialUserService::class => SocialUser\Service\Factory\SocialUserServiceFactory::class,
-                SocialUser\Storage\Doctrine::class => SocialUser\Storage\Factory\DoctrineStorageFactory::class,
+                Facebook::class => FacebookFactory::class,
+                Google::class => GoogleFactory::class,
+                SocialUserService::class => SocialUserServiceFactory::class,
+                Doctrine::class => DoctrineStorageFactory::class,
             ],
         ];
     }
@@ -44,7 +52,7 @@ class ConfigProvider
     {
         return [
             // default storage
-            'social_user_storage' => SocialUser\Storage\Doctrine::class,
+            'social_user_storage' => Doctrine::class,
             // local user provider name for service manager
             'local_user_provider' => '',
             // default user entity

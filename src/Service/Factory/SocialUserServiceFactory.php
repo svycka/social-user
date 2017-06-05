@@ -18,7 +18,7 @@ class SocialUserServiceFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $config = $container->get('Config')['svycka_social_user'];
+        $config = $container->get('config')['svycka_social_user'];
 
         $localUserProvider = $container->get($config['local_user_provider']);
 

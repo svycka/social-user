@@ -18,7 +18,7 @@ class FacebookFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $options = $container->get('Config')['svycka_social_user']['grant_type_options'];
+        $options = $container->get('config')['svycka_social_user']['grant_type_options'];
 
         if (empty($options[GrantType\Facebook::class])) {
             throw new ServiceNotCreatedException('Facebook API options are not set');

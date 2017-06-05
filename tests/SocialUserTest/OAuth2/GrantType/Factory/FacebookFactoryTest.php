@@ -18,7 +18,7 @@ class FacebookFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $services = $this->prophesize(ServiceLocatorInterface::class);
         $services->willImplement(ContainerInterface::class);
-        $services->get('Config')->willReturn([
+        $services->get('config')->willReturn([
             'svycka_social_user' => [
                 'grant_type_options' => [
                     GrantType\Facebook::class => [
@@ -42,7 +42,7 @@ class FacebookFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $services = $this->prophesize(ServiceLocatorInterface::class);
         $services->willImplement(ContainerInterface::class);
-        $services->get('Config')->willReturn([
+        $services->get('config')->willReturn([
             'svycka_social_user' => [
                 'grant_type_options' => []
             ]
