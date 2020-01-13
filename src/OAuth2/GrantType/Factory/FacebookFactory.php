@@ -3,18 +3,17 @@
 namespace Svycka\SocialUser\OAuth2\GrantType\Factory;
 
 use Facebook\Facebook;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Interop\Container\ContainerInterface;
 use Svycka\SocialUser\OAuth2\GrantType;
 use Svycka\SocialUser\Service\SocialUserService;
-use Zend\ServiceManager\Exception\ServiceNotCreatedException;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 
 /**
  * @author Vytautas Stankus <svycka@gmail.com>
  * @license MIT
  */
-class FacebookFactory implements FactoryInterface
+final class FacebookFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
@@ -28,10 +27,5 @@ class FacebookFactory implements FactoryInterface
         $socialUserService = $container->get(SocialUserService::class);
 
         return new GrantType\Facebook($socialUserService, $facebook);
-    }
-
-    public function createService(ServiceLocatorInterface $services)
-    {
-        return $this($services, GrantType\Facebook::class);
     }
 }

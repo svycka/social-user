@@ -19,7 +19,7 @@ use Svycka\SocialUser\UserProfileInterface;
  * @author Vytautas Stankus <svycka@gmail.com>
  * @license MIT
  */
-class FacebookTest extends \PHPUnit_Framework_TestCase
+class FacebookTest extends \PHPUnit\Framework\TestCase
 {
     /** @var SocialUserService */
     private $socialUserService;

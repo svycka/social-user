@@ -5,14 +5,14 @@ namespace Svycka\SocialUserTest\Service\Factory;
 use Interop\Container\ContainerInterface;
 use Svycka\SocialUser\OAuth2\GrantType;
 use Svycka\SocialUser\Service\SocialUserService;
-use Zend\ServiceManager\Exception\ServiceNotCreatedException;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * @author Vytautas Stankus <svycka@gmail.com>
  * @license MIT
  */
-class FacebookFactoryTest extends \PHPUnit_Framework_TestCase
+class FacebookFactoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testCanCreate()
     {
@@ -33,7 +33,7 @@ class FacebookFactoryTest extends \PHPUnit_Framework_TestCase
         $services->get(SocialUserService::class)->willReturn($service->reveal());
 
         $factory = new GrantType\Factory\FacebookFactory();
-        $service = $factory->createService($services->reveal());
+        $service = $factory($services->reveal(), GrantType\Facebook::class);
 
         $this->assertInstanceOf(GrantType\Facebook::class, $service);
     }
@@ -48,9 +48,10 @@ class FacebookFactoryTest extends \PHPUnit_Framework_TestCase
             ]
         ]);
 
-        $this->setExpectedException(ServiceNotCreatedException::class, 'Facebook API options are not set');
+        $this->expectException(ServiceNotCreatedException::class);
+        $this->expectExceptionMessage('Facebook API options are not set');
 
         $factory = new GrantType\Factory\FacebookFactory();
-        $factory->createService($services->reveal());
+        $factory($services->reveal(), GrantType\Facebook::class);
     }
 }

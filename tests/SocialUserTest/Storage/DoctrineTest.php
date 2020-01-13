@@ -13,7 +13,7 @@ use Svycka\SocialUser\Storage\Doctrine;
  * @author Vytautas Stankus <svycka@gmail.com>
  * @license MIT
  */
-class DoctrineTest extends \PHPUnit_Framework_TestCase
+class DoctrineTest extends \PHPUnit\Framework\TestCase
 {
     private $entityManager;
 
@@ -25,6 +25,8 @@ class DoctrineTest extends \PHPUnit_Framework_TestCase
     public function testCanCreateWithoutOptions()
     {
         new Doctrine($this->entityManager->reveal());
+
+        $this->expectNotToPerformAssertions();
     }
 
     public function testCanCreateWithOptions()
@@ -33,6 +35,8 @@ class DoctrineTest extends \PHPUnit_Framework_TestCase
             'social_user_entity' => SocialUser::class
         ];
         new Doctrine($this->entityManager->reveal(), $options);
+
+        $this->expectNotToPerformAssertions();
     }
 
     public function testThrowExceptionIfInvalidEntity()
@@ -40,7 +44,8 @@ class DoctrineTest extends \PHPUnit_Framework_TestCase
         $options = [
             'social_user_entity' => \stdClass::class
         ];
-        $this->setExpectedException(\Exception::class, sprintf(
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage(sprintf(
             'Configured "social_user_entity" class should implement %s',
             SocialUserInterface::class
         ));

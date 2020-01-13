@@ -12,10 +12,10 @@ use Svycka\SocialUser\Service\SocialUserService;
 use Svycka\SocialUser\UserProfileInterface;
 
 /**
- * @author Vytautas Stankus <svycka@gmail.com>
+ * @author  Vytautas Stankus <svycka@gmail.com>
  * @license MIT
  */
-class GoogleTest extends \PHPUnit_Framework_TestCase
+class GoogleTest extends \PHPUnit\Framework\TestCase
 {
     /** @var SocialUserService */
     private $socialUserService;
@@ -33,9 +33,9 @@ class GoogleTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->socialUserService = $this->prophesize(SocialUserService::class);
-        $this->httpClient        = $this->prophesize(\GuzzleHttp\Client::class);
-        $this->request           = $this->prophesize(RequestInterface::class);
-        $this->response          = $this->prophesize(ResponseInterface::class);
+        $this->httpClient = $this->prophesize(\GuzzleHttp\Client::class);
+        $this->request = $this->prophesize(RequestInterface::class);
+        $this->response = $this->prophesize(ResponseInterface::class);
 
         $this->options = ['audience' => '1008719970978-hb24n2dstb40o45d4feuo2ukqmcc6381.apps.googleusercontent.com'];
         $this->grantType = new Google($this->socialUserService->reveal(), $this->httpClient->reveal(), $this->options);
@@ -43,10 +43,8 @@ class GoogleTest extends \PHPUnit_Framework_TestCase
 
     public function testWillThrowExceptionIfApplicationIdIsNotProvided()
     {
-        $this->setExpectedException(
-            \InvalidArgumentException::class,
-            '"audience" option is required but not provided.'
-        );
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('"audience" option is required but not provided.');
         $this->grantType = new Google($this->socialUserService->reveal(), new \GuzzleHttp\Client, []);
     }
 
@@ -64,7 +62,7 @@ class GoogleTest extends \PHPUnit_Framework_TestCase
         $this->httpClient->request('GET', 'https://www.googleapis.com/oauth2/v3/tokeninfo', [
             'query' => [
                 'id_token' => 'token',
-            ]
+            ],
         ])->willThrow(ClientException::class);
         $this->response->setError(401, 'invalid_grant', 'Invalid or expired token')->shouldBeCalled();
 
@@ -135,12 +133,12 @@ class GoogleTest extends \PHPUnit_Framework_TestCase
         $this->request->request('token')->willReturn('token');
         $tokenInfo = json_encode([
             // These six fields are included in all Google ID Tokens.
-            "iss"            => "https://accounts.google.com",
-            "sub"            => "110169484474386276334",
-            "azp"            => "1008719970978-hb24n2dstb40o45d4feuo2ukqmcc6381.apps.googleusercontent.com",
-            "aud"            => "1008719970978-hb24n2dstb40o45d4feuo2ukqmcc6381.apps.googleusercontent.com",
-            "iat"            => "1433978353",
-            "exp"            => "1433981953"
+            "iss" => "https://accounts.google.com",
+            "sub" => "110169484474386276334",
+            "azp" => "1008719970978-hb24n2dstb40o45d4feuo2ukqmcc6381.apps.googleusercontent.com",
+            "aud" => "1008719970978-hb24n2dstb40o45d4feuo2ukqmcc6381.apps.googleusercontent.com",
+            "iat" => "1433978353",
+            "exp" => "1433981953",
         ]);
         $this->setSocialApiResponse($tokenInfo);
 
@@ -169,23 +167,23 @@ class GoogleTest extends \PHPUnit_Framework_TestCase
     {
         return json_encode([
             // These six fields are included in all Google ID Tokens.
-            "iss"            => "https://accounts.google.com",
-            "sub"            => "110169484474386276334",
-            "azp"            => "1008719970978-hb24n2dstb40o45d4feuo2ukqmcc6381.apps.googleusercontent.com",
-            "aud"            => "1008719970978-hb24n2dstb40o45d4feuo2ukqmcc6381.apps.googleusercontent.com",
-            "iat"            => "1433978353",
-            "exp"            => "1433981953",
+            "iss" => "https://accounts.google.com",
+            "sub" => "110169484474386276334",
+            "azp" => "1008719970978-hb24n2dstb40o45d4feuo2ukqmcc6381.apps.googleusercontent.com",
+            "aud" => "1008719970978-hb24n2dstb40o45d4feuo2ukqmcc6381.apps.googleusercontent.com",
+            "iat" => "1433978353",
+            "exp" => "1433981953",
 
             // These seven fields are only included when the user has granted the "profile" and
             // "email" OAuth scopes to the application.
-            "email"          => "testuser@gmail.com",
+            "email" => "testuser@gmail.com",
             "email_verified" => "true",
-            "name"           => "Test User",
-            "picture"        => "https://lh4.googleusercontent.com/-kYgzyAWpZzJ/ABCD"
-                                . "EFGHI/AAAJKLMNOP/tIXL9Ir44LE/s99-c/photo.jpg",
-            "given_name"     => "Test",
-            "family_name"    => "User",
-            "locale"         => "en"
+            "name" => "Test User",
+            "picture" => "https://lh4.googleusercontent.com/-kYgzyAWpZzJ/ABCD"
+                . "EFGHI/AAAJKLMNOP/tIXL9Ir44LE/s99-c/photo.jpg",
+            "given_name" => "Test",
+            "family_name" => "User",
+            "locale" => "en",
         ]);
     }
 
@@ -194,7 +192,7 @@ class GoogleTest extends \PHPUnit_Framework_TestCase
         $this->httpClient->request('GET', 'https://www.googleapis.com/oauth2/v3/tokeninfo', [
             'query' => [
                 'id_token' => 'token',
-            ]
+            ],
         ])->willReturn(new \GuzzleHttp\Psr7\Response($http_status, [], $content));
     }
 }

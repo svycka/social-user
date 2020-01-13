@@ -7,13 +7,13 @@ use Interop\Container\ContainerInterface;
 use Svycka\SocialUser\Entity\SocialUser;
 use Svycka\SocialUser\Storage\Doctrine;
 use Svycka\SocialUser\Storage\Factory\DoctrineStorageFactory;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * @author Vytautas Stankus <svycka@gmail.com>
  * @license MIT
  */
-class DoctrineStorageFactoryTest extends \PHPUnit_Framework_TestCase
+class DoctrineStorageFactoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testCanCreate()
     {
@@ -29,7 +29,7 @@ class DoctrineStorageFactoryTest extends \PHPUnit_Framework_TestCase
         $services->get("doctrine.entitymanager.orm_default")->willReturn($storage->reveal());
 
         $factory = new DoctrineStorageFactory();
-        $storage = $factory->createService($services->reveal());
+        $storage = $factory($services->reveal(), Doctrine::class);
         $this->assertInstanceOf(Doctrine::class, $storage);
     }
 }

@@ -5,14 +5,14 @@ namespace Svycka\SocialUserTest\Service\Factory;
 use Interop\Container\ContainerInterface;
 use Svycka\SocialUser\OAuth2\GrantType;
 use Svycka\SocialUser\Service\SocialUserService;
-use Zend\ServiceManager\Exception\ServiceNotCreatedException;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * @author Vytautas Stankus <svycka@gmail.com>
  * @license MIT
  */
-class GoogleFactoryTest extends \PHPUnit_Framework_TestCase
+class GoogleFactoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testCanCreate()
     {
@@ -32,7 +32,7 @@ class GoogleFactoryTest extends \PHPUnit_Framework_TestCase
         $services->get(SocialUserService::class)->willReturn($service->reveal());
 
         $factory = new GrantType\Factory\GoogleFactory();
-        $service = $factory->createService($services->reveal());
+        $service = $factory($services->reveal(), GrantType\Google::class);
 
         $this->assertInstanceOf(GrantType\Google::class, $service);
     }
@@ -47,12 +47,10 @@ class GoogleFactoryTest extends \PHPUnit_Framework_TestCase
             ]
         ]);
 
-        $this->setExpectedException(ServiceNotCreatedException::class, sprintf(
-            '"%s" options not set',
-            GrantType\Google::class
-        ));
+        $this->expectException(ServiceNotCreatedException::class);
+        $this->expectExceptionMessage(sprintf('"%s" options not set', GrantType\Google::class));
 
         $factory = new GrantType\Factory\GoogleFactory();
-        $factory->createService($services->reveal());
+        $factory($services->reveal(), GrantType\Google::class);
     }
 }

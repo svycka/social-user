@@ -5,7 +5,8 @@ All Notable changes to `svycka/social-user` will be documented in this file
 ## NEXT - YYYY-MM-DD
 
 ### Added
-- Nothing
+- [#11](https://github.com/svycka/social-user/pull/11) Added support for Laminas
+- [#11](https://github.com/svycka/social-user/pull/11) Added support for PHP 7.2, 7.3 and 7.4
 
 ### Deprecated
 - Nothing
@@ -14,7 +15,8 @@ All Notable changes to `svycka/social-user` will be documented in this file
 - Nothing
 
 ### Removed
-- Nothing
+- [#11](https://github.com/svycka/social-user/pull/11) Removed PHP 5.6, 7.0 and php7.1 support
+- [#11](https://github.com/svycka/social-user/pull/11) Removed zend-servicemanager 2.* support
 
 ### Security
 - Nothing

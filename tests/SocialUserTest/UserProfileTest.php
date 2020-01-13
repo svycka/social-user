@@ -8,7 +8,7 @@ use Svycka\SocialUser\UserProfile;
  * @author Vytautas Stankus <svycka@gmail.com>
  * @license MIT
  */
-class UserProfileTest extends \PHPUnit_Framework_TestCase
+class UserProfileTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var UserProfile

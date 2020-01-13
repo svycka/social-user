@@ -7,14 +7,14 @@ use Svycka\SocialUser\LocalUserProviderInterface;
 use Svycka\SocialUser\Service\Factory\SocialUserServiceFactory;
 use Svycka\SocialUser\Service\SocialUserService;
 use Svycka\SocialUser\Storage\SocialUserStorageInterface;
-use Zend\ServiceManager\Exception\ServiceNotCreatedException;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * @author Vytautas Stankus <svycka@gmail.com>
  * @license MIT
  */
-class SocialUserServiceFactoryTest extends \PHPUnit_Framework_TestCase
+class SocialUserServiceFactoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testCanCreate()
     {
@@ -34,7 +34,7 @@ class SocialUserServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $services->get(SocialUserStorageInterface::class)->willReturn($storage->reveal());
 
         $factory = new SocialUserServiceFactory();
-        $service = $factory->createService($services->reveal());
+        $service = $factory($services->reveal(), SocialUserService::class);
         $this->assertInstanceOf(SocialUserService::class, $service);
     }
 
@@ -55,11 +55,12 @@ class SocialUserServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $services->get(SocialUserStorageInterface::class)->willReturn($storage->reveal());
 
         $factory = new SocialUserServiceFactory();
-        $this->setExpectedException(ServiceNotCreatedException::class, sprintf(
+        $this->expectException(ServiceNotCreatedException::class);
+        $this->expectExceptionMessage(sprintf(
             'Invalid "local_user_provider" specified expected class name with implements "%s"',
             LocalUserProviderInterface::class
         ));
-        $factory->createService($services->reveal());
+        $factory($services->reveal(), SocialUserService::class);
     }
 
     public function testThrowExceptionIfInvalidStorage()
@@ -80,10 +81,11 @@ class SocialUserServiceFactoryTest extends \PHPUnit_Framework_TestCase
 
         $factory = new SocialUserServiceFactory();
 
-        $this->setExpectedException(ServiceNotCreatedException::class, sprintf(
+        $this->expectException(ServiceNotCreatedException::class);
+        $this->expectExceptionMessage(sprintf(
             'Invalid "social_user_storage" specified expected class name with implements "%s"',
             SocialUserStorageInterface::class
         ));
-        $factory->createService($services->reveal());
+        $factory($services->reveal(), SocialUserService::class);
     }
 }
