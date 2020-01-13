@@ -32,7 +32,7 @@ class GoogleFactoryTest extends \PHPUnit\Framework\TestCase
         $services->get(SocialUserService::class)->willReturn($service->reveal());
 
         $factory = new GrantType\Factory\GoogleFactory();
-        $service = $factory->createService($services->reveal());
+        $service = $factory($services->reveal(), GrantType\Google::class);
 
         $this->assertInstanceOf(GrantType\Google::class, $service);
     }
@@ -51,6 +51,6 @@ class GoogleFactoryTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage(sprintf('"%s" options not set', GrantType\Google::class));
 
         $factory = new GrantType\Factory\GoogleFactory();
-        $factory->createService($services->reveal());
+        $factory($services->reveal(), GrantType\Google::class);
     }
 }

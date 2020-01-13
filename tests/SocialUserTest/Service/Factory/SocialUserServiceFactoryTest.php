@@ -34,7 +34,7 @@ class SocialUserServiceFactoryTest extends \PHPUnit\Framework\TestCase
         $services->get(SocialUserStorageInterface::class)->willReturn($storage->reveal());
 
         $factory = new SocialUserServiceFactory();
-        $service = $factory->createService($services->reveal());
+        $service = $factory($services->reveal(), SocialUserService::class);
         $this->assertInstanceOf(SocialUserService::class, $service);
     }
 
@@ -60,7 +60,7 @@ class SocialUserServiceFactoryTest extends \PHPUnit\Framework\TestCase
             'Invalid "local_user_provider" specified expected class name with implements "%s"',
             LocalUserProviderInterface::class
         ));
-        $factory->createService($services->reveal());
+        $factory($services->reveal(), SocialUserService::class);
     }
 
     public function testThrowExceptionIfInvalidStorage()
@@ -86,6 +86,6 @@ class SocialUserServiceFactoryTest extends \PHPUnit\Framework\TestCase
             'Invalid "social_user_storage" specified expected class name with implements "%s"',
             SocialUserStorageInterface::class
         ));
-        $factory->createService($services->reveal());
+        $factory($services->reveal(), SocialUserService::class);
     }
 }

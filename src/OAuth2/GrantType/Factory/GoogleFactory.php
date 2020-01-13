@@ -2,18 +2,17 @@
 
 namespace Svycka\SocialUser\OAuth2\GrantType\Factory;
 
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Interop\Container\ContainerInterface;
 use Svycka\SocialUser\OAuth2\GrantType;
 use Svycka\SocialUser\Service\SocialUserService;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * @author Vytautas Stankus <svycka@gmail.com>
  * @license MIT
  */
-class GoogleFactory implements FactoryInterface
+final class GoogleFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
@@ -27,10 +26,5 @@ class GoogleFactory implements FactoryInterface
         $socialUserService = $container->get(SocialUserService::class);
 
         return new GrantType\Google($socialUserService, $httpClient, $options[GrantType\Google::class]);
-    }
-
-    public function createService(ServiceLocatorInterface $services)
-    {
-        return $this($services, GrantType\Google::class);
     }
 }

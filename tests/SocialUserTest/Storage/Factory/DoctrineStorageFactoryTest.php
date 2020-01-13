@@ -29,7 +29,7 @@ class DoctrineStorageFactoryTest extends \PHPUnit\Framework\TestCase
         $services->get("doctrine.entitymanager.orm_default")->willReturn($storage->reveal());
 
         $factory = new DoctrineStorageFactory();
-        $storage = $factory->createService($services->reveal());
+        $storage = $factory($services->reveal(), Doctrine::class);
         $this->assertInstanceOf(Doctrine::class, $storage);
     }
 }

@@ -33,7 +33,7 @@ class FacebookFactoryTest extends \PHPUnit\Framework\TestCase
         $services->get(SocialUserService::class)->willReturn($service->reveal());
 
         $factory = new GrantType\Factory\FacebookFactory();
-        $service = $factory->createService($services->reveal());
+        $service = $factory($services->reveal(), GrantType\Facebook::class);
 
         $this->assertInstanceOf(GrantType\Facebook::class, $service);
     }
@@ -52,6 +52,6 @@ class FacebookFactoryTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('Facebook API options are not set');
 
         $factory = new GrantType\Factory\FacebookFactory();
-        $factory->createService($services->reveal());
+        $factory($services->reveal(), GrantType\Facebook::class);
     }
 }

@@ -57,11 +57,12 @@ class Doctrine implements SocialUserStorageInterface
     }
 
     /**
-     * @param int    $user_id
+     * @param int $user_id
      * @param string $identifier
      * @param string $provider
      *
      * @return SocialUserInterface
+     * @throws \Doctrine\ORM\ORMException
      */
     public function addSocialUser($user_id, $identifier, $provider)
     {

@@ -13,6 +13,6 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
     public function testConfigIsArray()
     {
         $configProvider = new ConfigProvider();
-        $this->assertInternalType('array', $configProvider->__invoke());
+        $this->assertIsArray($configProvider->__invoke());
     }
 }

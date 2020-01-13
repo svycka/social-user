@@ -2,16 +2,15 @@
 
 namespace Svycka\SocialUser\Storage\Factory;
 
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Interop\Container\ContainerInterface;
 use Svycka\SocialUser\Storage\Doctrine;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * @author Vytautas Stankus <svycka@gmail.com>
  * @license MIT
  */
-class DoctrineStorageFactory implements FactoryInterface
+final class DoctrineStorageFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
@@ -23,10 +22,5 @@ class DoctrineStorageFactory implements FactoryInterface
         ];
 
         return new Doctrine($entityManager, $options);
-    }
-
-    public function createService(ServiceLocatorInterface $services)
-    {
-        return $this($services, Doctrine::class);
     }
 }
