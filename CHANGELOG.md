@@ -2,7 +2,7 @@
 
 All Notable changes to `svycka/social-user` will be documented in this file
 
-## NEXT - YYYY-MM-DD
+## 2.0.0 - 2020-01-13
 
 ### Added
 - [#11](https://github.com/svycka/social-user/pull/11) Added support for Laminas
