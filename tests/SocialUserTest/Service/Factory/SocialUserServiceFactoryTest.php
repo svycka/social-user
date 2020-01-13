@@ -14,7 +14,7 @@ use Laminas\ServiceManager\ServiceLocatorInterface;
  * @author Vytautas Stankus <svycka@gmail.com>
  * @license MIT
  */
-class SocialUserServiceFactoryTest extends \PHPUnit_Framework_TestCase
+class SocialUserServiceFactoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testCanCreate()
     {
@@ -55,7 +55,8 @@ class SocialUserServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $services->get(SocialUserStorageInterface::class)->willReturn($storage->reveal());
 
         $factory = new SocialUserServiceFactory();
-        $this->setExpectedException(ServiceNotCreatedException::class, sprintf(
+        $this->expectException(ServiceNotCreatedException::class);
+        $this->expectExceptionMessage(sprintf(
             'Invalid "local_user_provider" specified expected class name with implements "%s"',
             LocalUserProviderInterface::class
         ));
@@ -80,7 +81,8 @@ class SocialUserServiceFactoryTest extends \PHPUnit_Framework_TestCase
 
         $factory = new SocialUserServiceFactory();
 
-        $this->setExpectedException(ServiceNotCreatedException::class, sprintf(
+        $this->expectException(ServiceNotCreatedException::class);
+        $this->expectExceptionMessage(sprintf(
             'Invalid "social_user_storage" specified expected class name with implements "%s"',
             SocialUserStorageInterface::class
         ));

@@ -9,7 +9,7 @@ use Svycka\SocialUser\Module;
  * @author Vytautas Stankus <svycka@gmail.com>
  * @license MIT
  */
-class ModuleTest extends \PHPUnit_Framework_TestCase
+class ModuleTest extends \PHPUnit\Framework\TestCase
 {
     public function testConfigIsArray()
     {

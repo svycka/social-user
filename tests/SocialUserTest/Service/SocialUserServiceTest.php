@@ -12,7 +12,7 @@ use Svycka\SocialUser\UserProfile;
  * @author Vytautas Stankus <svycka@gmail.com>
  * @license MIT
  */
-class SocialUserServiceTest extends \PHPUnit_Framework_TestCase
+class SocialUserServiceTest extends \PHPUnit\Framework\TestCase
 {
     /** @var SocialUser */
     private $socialUser;
@@ -48,7 +48,8 @@ class SocialUserServiceTest extends \PHPUnit_Framework_TestCase
     {
         $service = new SocialUserService($this->localUserProvider->reveal(), $this->socialUserStorage->reveal());
 
-        $this->setExpectedException(\InvalidArgumentException::class, 'Invalid "provider" argument provided.');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid "provider" argument provided.');
         $service->getLocalUser(0, $this->userProfile);
     }
 

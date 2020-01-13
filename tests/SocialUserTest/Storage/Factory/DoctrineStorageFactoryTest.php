@@ -13,7 +13,7 @@ use Laminas\ServiceManager\ServiceLocatorInterface;
  * @author Vytautas Stankus <svycka@gmail.com>
  * @license MIT
  */
-class DoctrineStorageFactoryTest extends \PHPUnit_Framework_TestCase
+class DoctrineStorageFactoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testCanCreate()
     {

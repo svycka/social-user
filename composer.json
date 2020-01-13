@@ -24,7 +24,7 @@
         }
     ],
     "require": {
-        "php": "^5.6 || ^7.0",
+        "php": "^7.2",
         "bshaffer/oauth2-server-php": "^1.11",
         "laminas/laminas-servicemanager": "^2.7.5 || ^3.0.3"
     },
@@ -32,9 +32,9 @@
         "doctrine/orm": "^2.5.6",
         "facebook/graph-sdk": "^5.3.1",
         "guzzlehttp/guzzle": "^6.1",
-        "phpunit/phpunit": "^4.8",
-        "scrutinizer/ocular": "~1.1",
-        "squizlabs/php_codesniffer": "^2.5",
+        "phpunit/phpunit": "^7.5.20",
+        "scrutinizer/ocular": "^1.6.0",
+        "squizlabs/php_codesniffer": "^3.5.3",
         "laminas/laminas-modulemanager": "^2.7"
     },
     "suggest": {

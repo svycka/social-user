@@ -12,7 +12,7 @@ use Laminas\ServiceManager\ServiceLocatorInterface;
  * @author Vytautas Stankus <svycka@gmail.com>
  * @license MIT
  */
-class FacebookFactoryTest extends \PHPUnit_Framework_TestCase
+class FacebookFactoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testCanCreate()
     {
@@ -48,7 +48,8 @@ class FacebookFactoryTest extends \PHPUnit_Framework_TestCase
             ]
         ]);
 
-        $this->setExpectedException(ServiceNotCreatedException::class, 'Facebook API options are not set');
+        $this->expectException(ServiceNotCreatedException::class);
+        $this->expectExceptionMessage('Facebook API options are not set');
 
         $factory = new GrantType\Factory\FacebookFactory();
         $factory->createService($services->reveal());

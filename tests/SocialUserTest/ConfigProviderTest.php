@@ -8,7 +8,7 @@ use Svycka\SocialUser\ConfigProvider;
  * @author Vytautas Stankus <svycka@gmail.com>
  * @license MIT
  */
-class ConfigProviderTest extends \PHPUnit_Framework_TestCase
+class ConfigProviderTest extends \PHPUnit\Framework\TestCase
 {
     public function testConfigIsArray()
     {

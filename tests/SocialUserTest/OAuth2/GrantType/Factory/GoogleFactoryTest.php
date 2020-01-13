@@ -12,7 +12,7 @@ use Laminas\ServiceManager\ServiceLocatorInterface;
  * @author Vytautas Stankus <svycka@gmail.com>
  * @license MIT
  */
-class GoogleFactoryTest extends \PHPUnit_Framework_TestCase
+class GoogleFactoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testCanCreate()
     {
@@ -47,10 +47,8 @@ class GoogleFactoryTest extends \PHPUnit_Framework_TestCase
             ]
         ]);
 
-        $this->setExpectedException(ServiceNotCreatedException::class, sprintf(
-            '"%s" options not set',
-            GrantType\Google::class
-        ));
+        $this->expectException(ServiceNotCreatedException::class);
+        $this->expectExceptionMessage(sprintf('"%s" options not set', GrantType\Google::class));
 
         $factory = new GrantType\Factory\GoogleFactory();
         $factory->createService($services->reveal());

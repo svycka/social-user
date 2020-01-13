@@ -8,7 +8,7 @@ use Svycka\SocialUser\Entity\SocialUser;
  * @author Vytautas Stankus <svycka@gmail.com>
  * @license MIT
  */
-class SocialUserTest extends \PHPUnit_Framework_TestCase
+class SocialUserTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SocialUser
