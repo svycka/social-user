@@ -7,8 +7,8 @@ use Svycka\SocialUser\LocalUserProviderInterface;
 use Svycka\SocialUser\Service\Factory\SocialUserServiceFactory;
 use Svycka\SocialUser\Service\SocialUserService;
 use Svycka\SocialUser\Storage\SocialUserStorageInterface;
-use Zend\ServiceManager\Exception\ServiceNotCreatedException;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * @author Vytautas Stankus <svycka@gmail.com>

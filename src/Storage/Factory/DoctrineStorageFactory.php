@@ -4,8 +4,8 @@ namespace Svycka\SocialUser\Storage\Factory;
 
 use Interop\Container\ContainerInterface;
 use Svycka\SocialUser\Storage\Doctrine;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * @author Vytautas Stankus <svycka@gmail.com>

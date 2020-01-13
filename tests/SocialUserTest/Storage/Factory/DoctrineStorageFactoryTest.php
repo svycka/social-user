@@ -7,7 +7,7 @@ use Interop\Container\ContainerInterface;
 use Svycka\SocialUser\Entity\SocialUser;
 use Svycka\SocialUser\Storage\Doctrine;
 use Svycka\SocialUser\Storage\Factory\DoctrineStorageFactory;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * @author Vytautas Stankus <svycka@gmail.com>
