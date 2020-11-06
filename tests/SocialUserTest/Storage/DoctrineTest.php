@@ -2,7 +2,7 @@
 
 namespace Svycka\SocialUserTest\Storage;
 
-use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityManager;
 use Prophecy\Argument\Token\TypeToken;
 use Svycka\SocialUser\Entity\SocialUser;
@@ -69,7 +69,7 @@ class DoctrineTest extends \PHPUnit\Framework\TestCase
     public function testCanAddSocialUserLogin()
     {
         $this->entityManager->persist(new TypeToken(SocialUserInterface::class))->shouldBeCalled();
-        $this->entityManager->flush(new TypeToken(SocialUserInterface::class))->shouldBeCalled();
+        $this->entityManager->flush()->shouldBeCalled();
 
         $storage = new Doctrine($this->entityManager->reveal());
         $login = $storage->addSocialUser(1, 'id', 'provider');
