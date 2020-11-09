@@ -73,7 +73,7 @@ class Doctrine implements SocialUserStorageInterface
         $socialUser->setProvider($provider);
 
         $this->em->persist($socialUser);
-        $this->em->flush($socialUser);
+        $this->em->flush();
 
         return $socialUser;
     }
