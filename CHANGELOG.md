@@ -2,7 +2,7 @@
 
 All Notable changes to `svycka/social-user` will be documented in this file
 
-## NEXT - YYYY-MM-DD
+## 2.0.1 - 2020-11-09
 
 ### Added
 - Nothing
@@ -11,7 +11,7 @@ All Notable changes to `svycka/social-user` will be documented in this file
 - Nothing
 
 ### Fixed
-- Nothing
+- [#13](https://github.com/svycka/social-user/pull/13) Calling Doctrine\ORM\EntityManager::flush() with any arguments to flush specific entities is deprecated and will not be supported in Doctrine ORM 3.0.
 
 ### Removed
 - Nothing
