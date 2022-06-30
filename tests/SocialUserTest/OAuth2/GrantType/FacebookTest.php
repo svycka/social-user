@@ -32,7 +32,7 @@ class FacebookTest extends \PHPUnit\Framework\TestCase
     /** @var Facebook */
     private $grantType;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->socialUserService = $this->prophesize(SocialUserService::class);
         $this->facebook = $this->prophesize(FacebookSDK::class);

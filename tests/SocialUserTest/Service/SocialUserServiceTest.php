@@ -23,7 +23,7 @@ class SocialUserServiceTest extends \PHPUnit\Framework\TestCase
     /** @var SocialUserStorageInterface */
     private $socialUserStorage;
 
-    public function setUp()
+    public function setUp(): void
     {
         $socialUser = new SocialUser();
         $socialUser->setIdentifier('identifier');

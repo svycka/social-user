@@ -15,7 +15,7 @@ class UserProfileTest extends \PHPUnit\Framework\TestCase
      */
     private $profile;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->profile = new UserProfile();
     }

@@ -15,7 +15,7 @@ class SocialUserTest extends \PHPUnit\Framework\TestCase
      */
     public $entity;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->entity = new SocialUser();
     }
