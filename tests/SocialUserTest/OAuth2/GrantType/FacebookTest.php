@@ -2,11 +2,7 @@
 
 namespace Svycka\SocialUserTest\OAuth2\GrantType;
 
-use Facebook\Authentication\AccessTokenMetadata;
-use Facebook\Authentication\OAuth2Client;
-use Facebook\Exceptions\FacebookSDKException;
-use Facebook\Facebook as FacebookSDK;
-use Facebook\FacebookApp;
+use GuzzleHttp\Exception\ClientException;
 use OAuth2\RequestInterface;
 use OAuth2\ResponseInterface;
 use OAuth2\ResponseType\AccessTokenInterface;
@@ -21,10 +17,13 @@ use Svycka\SocialUser\UserProfileInterface;
  */
 class FacebookTest extends \PHPUnit\Framework\TestCase
 {
+    const APP_ID = 'FacebookAppID';
+    const APP_SECRET = 'FacebookAppSecret';
+
     /** @var SocialUserService */
     private $socialUserService;
-    /** @var FacebookSDK */
-    private $facebook;
+    /** @var \GuzzleHttp\Client */
+    private $httpClient;
     /** @var RequestInterface */
     private $request;
     /** @var ResponseInterface */
@@ -35,10 +34,15 @@ class FacebookTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->socialUserService = $this->prophesize(SocialUserService::class);
-        $this->facebook = $this->prophesize(FacebookSDK::class);
+        $this->httpClient = $this->prophesize(\GuzzleHttp\Client::class);
         $this->request = $this->prophesize(RequestInterface::class);
         $this->response = $this->prophesize(ResponseInterface::class);
-        $this->grantType = new Facebook($this->socialUserService->reveal(), $this->facebook->reveal());
+        $this->grantType = new Facebook(
+            $this->socialUserService->reveal(),
+            $this->httpClient->reveal(),
+            self::APP_ID,
+            self::APP_SECRET
+        );
     }
 
     public function testErrorMissingToken()
@@ -52,8 +56,12 @@ class FacebookTest extends \PHPUnit\Framework\TestCase
     public function testErrorInvalidToken()
     {
         $this->request->request('token')->willReturn('facebook_access_token');
-        $this->facebook->get('/me?fields=id,name,email,first_name,last_name', 'facebook_access_token')
-            ->willThrow(FacebookSDKException::class);
+        $this->httpClient->request('GET', 'https://graph.facebook.com/debug_token', [
+            'query' => [
+                'input_token' => 'facebook_access_token',
+                'access_token' => self::APP_ID . '|' . self::APP_SECRET,
+            ],
+        ])->willThrow(ClientException::class);
         $this->response->setError(401, 'invalid_grant', 'Invalid or expired token')->shouldBeCalled();
 
         $this->assertNull($this->grantType->validateRequest($this->request->reveal(), $this->response->reveal()));
@@ -62,10 +70,8 @@ class FacebookTest extends \PHPUnit\Framework\TestCase
     public function testWillNotAuthorizeIfSocialUserIdUnknown()
     {
         $this->request->request('token')->willReturn('facebook_access_token');
-        $graphUser = $this->prophesize(\Facebook\GraphNodes\GraphUser::class);
-        $graphUser->getId()->willReturn(null);
-
-        $this->setFacebookApiResponse($graphUser->reveal());
+        $this->withValidToken();
+        $this->setFacebookApiResponse('');
         $this->response->setError(401, 'invalid_grant', 'Invalid or expired token')->shouldBeCalled();
 
         $this->assertNull($this->grantType->validateRequest($this->request->reveal(), $this->response->reveal()));
@@ -74,13 +80,18 @@ class FacebookTest extends \PHPUnit\Framework\TestCase
     public function testDoesNotAllowTokenFromOtherApplications()
     {
         $this->request->request('token')->willReturn('facebook_access_token');
-        $this->facebook->getApp()->willReturn(new FacebookApp('123456', 'xxx'));
-        $oauth2client = $this->prophesize(OAuth2Client::class);
-        $oauth2client->debugToken('facebook_access_token')
-            ->willReturn(new AccessTokenMetadata(['data' => ['app_id' => '123']]));
-        $this->facebook->getOAuth2Client()->willReturn($oauth2client->reveal());
-
-        $this->setFacebookApiResponse($this->getGraphUser());
+        $this->httpClient->request('GET', 'https://graph.facebook.com/debug_token', [
+            'query' => [
+                'input_token' => 'facebook_access_token',
+                'access_token' => self::APP_ID . '|' . self::APP_SECRET,
+            ],
+        ])->willReturn(new \GuzzleHttp\Psr7\Response(200, [], json_encode([
+            'data' => [
+                'app_id' => '1323',
+                'is_valid' => true,
+                'expires_at' => time()+5,
+            ]
+        ])));
         $this->response->setError(401, 'invalid_grant', 'Invalid or expired token')->shouldBeCalled();
 
         $this->assertNull($this->grantType->validateRequest($this->request->reveal(), $this->response->reveal()));
@@ -89,12 +100,8 @@ class FacebookTest extends \PHPUnit\Framework\TestCase
     public function testCanAuthenticateAgainstFacebookButCantGetOrCreateLocalUser()
     {
         $this->request->request('token')->willReturn('facebook_access_token');
-        $this->facebook->getApp()->willReturn(new FacebookApp('123456', 'xxx'));
-        $oauth2client = $this->prophesize(OAuth2Client::class);
-        $oauth2client->debugToken('facebook_access_token')
-            ->willReturn(new AccessTokenMetadata(['data' => ['app_id' => '123456']]));
-        $this->facebook->getOAuth2Client()->willReturn($oauth2client->reveal());
-        $this->setFacebookApiResponse($this->getGraphUser());
+        $this->withValidToken();
+        $this->setFacebookApiResponse($this->validUserInfoResponse());
         $this->socialUserService->getLocalUser(Facebook::PROVIDER_NAME, new TypeToken(UserProfileInterface::class))
             ->willReturn(null);
         $this->response->setError(401, 'invalid_grant', 'Unable to identify or create user')->shouldBeCalled();
@@ -105,15 +112,11 @@ class FacebookTest extends \PHPUnit\Framework\TestCase
     public function testCanAuthenticate()
     {
         $this->request->request('token')->willReturn('facebook_access_token');
-        $this->setFacebookApiResponse($this->getGraphUser());
+        $this->withValidToken();
+        $this->setFacebookApiResponse($this->validUserInfoResponse());
 
         $this->socialUserService->getLocalUser(Facebook::PROVIDER_NAME, new TypeToken(UserProfileInterface::class))
             ->willReturn(123)->shouldBeCalled();
-        $this->facebook->getApp()->willReturn(new FacebookApp('123456', 'xxx'));
-        $oauth2client = $this->prophesize(OAuth2Client::class);
-        $oauth2client->debugToken('facebook_access_token')
-            ->willReturn(new AccessTokenMetadata(['data' => ['app_id' => '123456']]));
-        $this->facebook->getOAuth2Client()->willReturn($oauth2client->reveal());
 
         $this->assertTrue($this->grantType->validateRequest($this->request->reveal(), $this->response->reveal()));
         $this->assertEquals('facebook', $this->grantType->getQuerystringIdentifier());
@@ -133,23 +136,41 @@ class FacebookTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function getGraphUser()
+    public function withValidToken()
     {
-        $graphUser = $this->prophesize(\Facebook\GraphNodes\GraphUser::class);
-        $graphUser->getId()->willReturn('social_id');
-        $graphUser->getName()->willReturn('name');
-        $graphUser->getFirstName()->willReturn('first');
-        $graphUser->getLastName()->willReturn('last');
-        $graphUser->getEmail()->willReturn('user@mail.com');
-
-        return $graphUser->reveal();
+        $this->httpClient->request('GET', 'https://graph.facebook.com/debug_token', [
+            'query' => [
+                'input_token' => 'facebook_access_token',
+                'access_token' => self::APP_ID . '|' . self::APP_SECRET,
+            ],
+        ])->willReturn(new \GuzzleHttp\Psr7\Response(200, [], json_encode([
+            'data' => [
+                'app_id' => self::APP_ID,
+                'is_valid' => true,
+                'expires_at' => time()+5,
+            ]
+        ])));
     }
 
-    public function setFacebookApiResponse($graphUser)
+
+    public function setFacebookApiResponse($content, int $http_status = 200)
     {
-        $response = $this->prophesize(\Facebook\FacebookResponse::class);
-        $response->getGraphUser()->willReturn($graphUser);
-        $this->facebook->get('/me?fields=id,name,email,first_name,last_name', 'facebook_access_token')
-            ->willReturn($response);
+        $this->httpClient->request('GET', 'https://graph.facebook.com/me', [
+            'query' => [
+                'fields' => 'id,name,email,first_name,last_name',
+                'access_token' => 'facebook_access_token',
+            ],
+        ])->willReturn(new \GuzzleHttp\Psr7\Response($http_status, [], $content));
+    }
+
+    private function validUserInfoResponse(): string
+    {
+        return json_encode([
+            'id' => 'social_id',
+            'name' => 'name',
+            'first_name' => 'first',
+            'last_name' => 'last',
+            'email' => 'user@mail.com',
+        ]);
     }
 }

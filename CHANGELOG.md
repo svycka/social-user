@@ -5,7 +5,7 @@ All Notable changes to `svycka/social-user` will be documented in this file
 ## NEXT - YYYY-MM-DD
 
 ### Added
-- Nothing
+- [#14](https://github.com/svycka/social-user/pull/14) Added php 8 support
 
 ### Deprecated
 - Nothing
@@ -14,7 +14,7 @@ All Notable changes to `svycka/social-user` will be documented in this file
 - Nothing
 
 ### Removed
-- Nothing
+- [#14](https://github.com/svycka/social-user/pull/14) [BC Break] Removed facebook-graph-sdk because it is no longer supported
 
 ### Security
 - Nothing
