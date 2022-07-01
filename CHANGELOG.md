@@ -2,7 +2,7 @@
 
 All Notable changes to `svycka/social-user` will be documented in this file
 
-## NEXT - YYYY-MM-DD
+## 3.0.0 - 2022-07-01
 
 ### Added
 - [#14](https://github.com/svycka/social-user/pull/14) Added php 8 support
