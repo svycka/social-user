@@ -17,7 +17,7 @@ class DoctrineTest extends \PHPUnit\Framework\TestCase
 {
     private $entityManager;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->entityManager = $this->prophesize(EntityManager::class);
     }

@@ -30,7 +30,7 @@ class GoogleTest extends \PHPUnit\Framework\TestCase
     /** @var array */
     private $options;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->socialUserService = $this->prophesize(SocialUserService::class);
         $this->httpClient = $this->prophesize(\GuzzleHttp\Client::class);

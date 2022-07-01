@@ -24,23 +24,20 @@
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^8.0",
         "ext-json": "*",
         "bshaffer/oauth2-server-php": "^1.11",
         "laminas/laminas-servicemanager": "^3.4.0"
     },
     "require-dev": {
         "doctrine/orm": "^2.7.4",
-        "facebook/graph-sdk": "^5.3.1",
-        "guzzlehttp/guzzle": "^6.1",
-        "phpunit/phpunit": "^7.5.20",
-        "scrutinizer/ocular": "^1.6.0",
+        "guzzlehttp/guzzle": "^7.4",
+        "phpunit/phpunit": "^8.0",
         "squizlabs/php_codesniffer": "^3.5.3",
         "laminas/laminas-modulemanager": "^2.7"
     },
     "suggest": {
-        "facebook/graph-sdk": "Required, if you will use Facebook grant type",
-        "guzzlehttp/guzzle": "Required, if you will use Google grant type",
+        "guzzlehttp/guzzle": "Required, if you will use Google or Facebook grant type",
         "doctrine/orm": "Required, if you will use Doctrine for storage",
         "laminas/laminas-modulemanager": "Required, if you will use laminas-mvc"
     },

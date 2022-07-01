@@ -2,7 +2,6 @@
 
 namespace Svycka\SocialUser\OAuth2\GrantType\Factory;
 
-use Facebook\Facebook;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Interop\Container\ContainerInterface;
 use Svycka\SocialUser\OAuth2\GrantType;
@@ -19,13 +18,21 @@ final class FacebookFactory implements FactoryInterface
     {
         $options = $container->get('config')['svycka_social_user']['grant_type_options'];
 
-        if (empty($options[GrantType\Facebook::class])) {
+        if (empty($options[GrantType\Facebook::class])
+            || empty($options[GrantType\Facebook::class]['app_id'])
+            || empty($options[GrantType\Facebook::class]['app_secret'])
+        ) {
             throw new ServiceNotCreatedException('Facebook API options are not set');
         }
 
-        $facebook = new Facebook($options[GrantType\Facebook::class]);
+        $httpClient = new \GuzzleHttp\Client();
         $socialUserService = $container->get(SocialUserService::class);
 
-        return new GrantType\Facebook($socialUserService, $facebook);
+        return new GrantType\Facebook(
+            $socialUserService,
+            $httpClient,
+            $options[GrantType\Facebook::class]['app_id'],
+            $options[GrantType\Facebook::class]['app_secret']
+        );
     }
 }

@@ -2,8 +2,6 @@
 
 namespace Svycka\SocialUser\OAuth2\GrantType;
 
-use Facebook\Exceptions\FacebookSDKException;
-use Facebook\Facebook as FacebookSDK;
 use Svycka\SocialUser\Service\SocialUserService;
 use Svycka\SocialUser\UserProfile;
 use Svycka\SocialUser\UserProfileInterface;
@@ -12,24 +10,16 @@ use Svycka\SocialUser\UserProfileInterface;
  * @author Vytautas Stankus <svycka@gmail.com>
  * @license MIT
  */
-class Facebook extends AbstractSocialGrantType
+final class Facebook extends AbstractSocialGrantType
 {
     const PROVIDER_NAME = 'facebook';
 
-    /**
-     * @var SocialUserService
-     */
-    protected $socialUserService;
-
-    /**
-     * @var \Facebook\Facebook
-     */
-    protected $facebook;
-
-    public function __construct(SocialUserService $socialUserService, FacebookSDK $facebook)
-    {
-        $this->socialUserService = $socialUserService;
-        $this->facebook = $facebook;
+    public function __construct(
+        private SocialUserService $socialUserService,
+        private \GuzzleHttp\Client $httpClient,
+        private string $appIdentifier,
+        private string $appSecret
+    ) {
     }
 
     public function getQuerystringIdentifier()
@@ -45,34 +35,54 @@ class Facebook extends AbstractSocialGrantType
     protected function getTokenInfo($token)
     {
         try {
-            // Get the Facebook\GraphNodes\GraphUser object for the current user.
-            $response = $this->facebook->get('/me?fields=id,name,email,first_name,last_name', $token);
-            $user = $response->getGraphUser();
+            $response = $this->httpClient->request('GET', 'https://graph.facebook.com/debug_token', [
+                'query' => [
+                    'input_token' => $token,
+                    'access_token' => $this->appIdentifier . '|' . $this->appSecret,
+                ],
+            ]);
 
-            // check if we can get user identifier
-            if (empty($user->getId())) {
+            $tokenInfo = json_decode($response->getBody()->getContents(), true);
+
+            // to protect against "man in the middle" attack,
+            // do not accept tokens generated not for our application even if they are valid
+            if (empty($tokenInfo['data']['app_id']) || $tokenInfo['data']['app_id'] !== $this->appIdentifier) {
                 return null;
             }
 
-            // do not accept tokens generated not for our application even if they are valid,
-            // to protect against "man in the middle" attack
-            $tokenMetadata = $this->facebook->getOAuth2Client()->debugToken($token);
-            // this is not required, but lets be sure because facebook API changes very often
-            $tokenMetadata->validateAppId($this->facebook->getApp()->getId());
-
-            $userProfile = new UserProfile();
-            $userProfile->setIdentifier($user->getId());
-            $userProfile->setDisplayName($user->getName());
-            $userProfile->setFirstName($user->getFirstName());
-            $userProfile->setLastName($user->getLastName());
-            $userProfile->setEmail($user->getEmail());
-            // facebook doesn't allow login with not verified email
-            if (!empty($user->getEmail())) {
-                $userProfile->setEmailVerified(true);
+            // do not allow invalid or expired tokens
+            if (empty($tokenInfo['data']['is_valid'])
+                || empty($tokenInfo['data']['expires_at'])
+                || true !== $tokenInfo['data']['is_valid']
+                || time() > $tokenInfo['data']['expires_at']
+            ) {
+                return null;
             }
 
+            $response = $this->httpClient->request('GET', 'https://graph.facebook.com/me', [
+                'query' => [
+                    'fields' => 'id,name,email,first_name,last_name',
+                    'access_token' => $token,
+                ],
+            ]);
+
+            $user_info = json_decode($response->getBody()->getContents(), true);
+
+            // check if we can get user identifier
+            if (empty($user_info['id'])) {
+                return null;
+            }
+
+            $userProfile = new UserProfile();
+            $userProfile->setIdentifier($user_info['id']);
+            $userProfile->setDisplayName($user_info['name'] ?? null);
+            $userProfile->setFirstName($user_info['first_name'] ?? null);
+            $userProfile->setLastName($user_info['last_name'] ?? null);
+            $userProfile->setEmail($user_info['email'] ?? null);
+            $userProfile->setEmailVerified(true);
+
             return $userProfile;
-        } catch (FacebookSDKException $e) {
+        } catch (ClientException | \RuntimeException $e) {
             return null;
         }
     }
